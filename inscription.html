@@ -510,6 +510,12 @@ footer{background:var(--navy-deep); color:rgba(251,247,239,.7); padding:70px 0 3
 <style>
 .step-panel{display:none;} .step-panel.show{display:block;}
 #successPanel{display:none; text-align:center; padding:60px 20px;}
+.field-error{border-color:var(--danger) !important;}
+.field-error-msg{color:var(--danger); font-size:.78rem; margin-top:6px; display:none;}
+.field-error-msg.show{display:block;}
+.check-pill input:checked + span, .check-pill:has(input:checked){border-color:var(--gold); background:var(--gold-pale);}
+.radio-pill:has(input:checked){border-color:var(--navy); background:var(--gold-pale);}
+#submitInscription[disabled], .next-step[disabled]{opacity:.6; cursor:not-allowed;}
 </style>
 </head>
 <body>
@@ -564,27 +570,44 @@ footer{background:var(--navy-deep); color:rgba(251,247,239,.7); padding:70px 0 3
         <div class="step-panel show">
           <h3 style="margin-bottom:24px;">Vos informations personnelles</h3>
           <div class="form-grid">
-            <div class="field"><label>Prénom</label><input type="text" placeholder="Ex : Aïssatou"></div>
-            <div class="field"><label>Date de naissance</label><input type="date"></div>
+            <div class="field">
+              <label>Prénom</label>
+              <input id="i_prenom" type="text" placeholder="Votre prénom">
+              <span class="field-error-msg">Veuillez indiquer votre prénom.</span>
+            </div>
+            <div class="field">
+              <label>Date de naissance</label>
+              <input id="i_date_naissance" type="date">
+              <span class="field-error-msg">Vous devez avoir au moins 18 ans pour vous inscrire.</span>
+            </div>
             <div class="field full">
               <label>Sexe</label>
               <div class="radio-row">
-                <label class="radio-pill"><input type="radio" name="sexe" checked> Femme</label>
-                <label class="radio-pill"><input type="radio" name="sexe"> Homme</label>
+                <label class="radio-pill"><input type="radio" name="sexe" value="Femme" checked> Femme</label>
+                <label class="radio-pill"><input type="radio" name="sexe" value="Homme"> Homme</label>
               </div>
             </div>
             <div class="field"><label>Région</label>
-              <select><option>Dakar</option><option>Thiès</option><option>Saint-Louis</option><option>Diourbel</option><option>Kaolack</option><option>Ziguinchor</option><option>Louga</option><option>Tambacounda</option></select>
+              <select id="i_region">
+                <option>Dakar</option><option>Thiès</option><option>Saint-Louis</option><option>Diourbel</option>
+                <option>Kaolack</option><option>Ziguinchor</option><option>Louga</option><option>Tambacounda</option>
+              </select>
             </div>
-            <div class="field"><label>Ville</label><input type="text" placeholder="Ex : Pikine"></div>
-            <div class="field full"><label>Profession</label><input type="text" placeholder="Ex : Enseignante, Ingénieur, Commerçante..."></div>
+            <div class="field">
+              <label>Ville</label>
+              <input id="i_ville" type="text" placeholder="Ex : Pikine">
+              <span class="field-error-msg">Veuillez indiquer votre ville.</span>
+            </div>
+            <div class="field full"><label>Profession</label><input id="i_profession" type="text" placeholder="Ex : Enseignante, Ingénieur, Commerçante..."></div>
             <div class="field full">
               <label>Situation matrimoniale</label>
-              <select><option>Célibataire</option><option>Divorcé(e)</option><option>Veuf / Veuve</option></select>
+              <select id="i_situation">
+                <option>Célibataire</option><option>Divorcé(e)</option><option>Veuf / Veuve</option>
+              </select>
             </div>
           </div>
           <div class="form-actions" style="justify-content:flex-end;">
-            <button class="btn btn-navy next-step">Continuer →</button>
+            <button type="button" class="btn btn-navy next-step">Continuer →</button>
           </div>
         </div>
 
@@ -593,53 +616,57 @@ footer{background:var(--navy-deep); color:rgba(251,247,239,.7); padding:70px 0 3
           <h3 style="margin-bottom:24px;">Votre personnalité</h3>
           <div class="field full">
             <label>Centres d'intérêt <span class="hint">(sélectionnez-en plusieurs)</span></label>
-            <div class="check-row">
-              <label class="check-pill"><input type="checkbox" checked> Religion &amp; spiritualité</label>
-              <label class="check-pill"><input type="checkbox"> Cuisine</label>
-              <label class="check-pill"><input type="checkbox" checked> Lecture</label>
-              <label class="check-pill"><input type="checkbox"> Voyage</label>
-              <label class="check-pill"><input type="checkbox"> Sport</label>
-              <label class="check-pill"><input type="checkbox"> Famille</label>
-              <label class="check-pill"><input type="checkbox"> Entrepreneuriat</label>
-              <label class="check-pill"><input type="checkbox"> Musique</label>
+            <div class="check-row" id="interestGroup">
+              <label class="check-pill"><input type="checkbox" value="Religion" checked> Religion</label>
+              <label class="check-pill"><input type="checkbox" value="Cuisine"> Cuisine</label>
+              <label class="check-pill"><input type="checkbox" value="Lecture" checked> Lecture</label>
+              <label class="check-pill"><input type="checkbox" value="Voyage"> Voyage</label>
+              <label class="check-pill"><input type="checkbox" value="Sport"> Sport</label>
+              <label class="check-pill"><input type="checkbox" value="Famille"> Famille</label>
+              <label class="check-pill"><input type="checkbox" value="Entrepreneuriat"> Entrepreneuriat</label>
+              <label class="check-pill"><input type="checkbox" value="Musique"> Musique</label>
             </div>
           </div>
           <div class="field full">
             <label>Description personnelle <span class="hint">(présentez-vous sincèrement)</span></label>
-            <textarea placeholder="Parlez de vos valeurs, votre mode de vie et ce que vous recherchez pour un mariage serein..."></textarea>
+            <textarea id="i_description" placeholder="Parlez de vos valeurs, votre mode de vie et ce que vous recherchez pour un mariage serein..."></textarea>
           </div>
           <div class="form-actions">
-            <button class="btn btn-outline-navy prev-step">← Retour</button>
-            <button class="btn btn-navy next-step">Continuer →</button>
+            <button type="button" class="btn btn-outline-navy prev-step">← Retour</button>
+            <button type="button" class="btn btn-navy next-step">Continuer →</button>
           </div>
         </div>
 
         <!-- STEP 3 -->
         <div class="step-panel">
           <h3 style="margin-bottom:8px;">Photo de profil &amp; préférences</h3>
-          <p class="sub" style="color:var(--muted); font-size:.86rem; margin-bottom:20px;">Une photo claire et récente augmente vos chances d'être contacté(e).</p>
+          <p class="sub" style="color:var(--muted); font-size:.86rem; margin-bottom:20px;">Une photo claire et récente augmente vos chances d'être contacté(e). Elle sera envoyée dès la confirmation de votre compte.</p>
           <div class="field full">
             <label>Photo de profil</label>
             <label class="upload-zone" style="display:block;">
-              <input type="file" accept="image/*" hidden>
+              <input id="i_photo" type="file" accept="image/*" hidden>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>
-              <p>Cliquez pour téléverser une photo (JPG, PNG — max 5 Mo)</p>
+              <p id="uploadZoneText">Cliquez pour téléverser une photo (JPG, PNG — max 5 Mo)</p>
             </label>
           </div>
           <h4 style="margin:26px 0 14px; font-size:1rem;">Préférences de recherche</h4>
           <div class="form-grid">
-            <div class="field"><label>Tranche d'âge souhaitée</label><input type="text" placeholder="Ex : 25 – 35 ans"></div>
-            <div class="field"><label>Région préférée</label><select><option>Toutes les régions</option><option>Dakar</option><option>Thiès</option><option>Saint-Louis</option></select></div>
+            <div class="field"><label>Tranche d'âge souhaitée</label><input id="i_age_recherche" type="text" placeholder="Ex : 25 – 35 ans"></div>
+            <div class="field"><label>Région préférée</label>
+              <select id="i_region_recherchee">
+                <option>Toutes les régions</option><option>Dakar</option><option>Thiès</option><option>Saint-Louis</option>
+              </select>
+            </div>
             <div class="field full"><label>Situation matrimoniale recherchée</label>
               <div class="radio-row">
-                <label class="radio-pill"><input type="radio" name="pref" checked> Célibataire</label>
-                <label class="radio-pill"><input type="radio" name="pref"> Indifférent</label>
+                <label class="radio-pill"><input type="radio" name="pref_situation" value="Célibataire" checked> Célibataire</label>
+                <label class="radio-pill"><input type="radio" name="pref_situation" value="Indifférent"> Indifférent</label>
               </div>
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn btn-outline-navy prev-step">← Retour</button>
-            <button class="btn btn-navy next-step">Continuer →</button>
+            <button type="button" class="btn btn-outline-navy prev-step">← Retour</button>
+            <button type="button" class="btn btn-navy next-step">Continuer →</button>
           </div>
         </div>
 
@@ -647,16 +674,29 @@ footer{background:var(--navy-deep); color:rgba(251,247,239,.7); padding:70px 0 3
         <div class="step-panel">
           <h3 style="margin-bottom:24px;">Sécurisez votre compte</h3>
           <div class="form-grid">
-            <div class="field"><label>Adresse e-mail ou téléphone</label><input type="text" placeholder="exemple@mail.com ou 77 123 45 67"></div>
-            <div class="field"><label>Mot de passe</label><input type="password" placeholder="8 caractères minimum"></div>
+            <div class="field">
+              <label>Adresse e-mail</label>
+              <input id="i_email" type="email" placeholder="exemple@mail.com">
+              <span class="field-error-msg">Veuillez saisir une adresse e-mail valide.</span>
+            </div>
+            <div class="field">
+              <label>Téléphone <span class="hint">(optionnel)</span></label>
+              <input id="i_telephone" type="tel" placeholder="77 123 45 67">
+            </div>
+            <div class="field full">
+              <label>Mot de passe</label>
+              <input id="i_password" type="password" placeholder="8 caractères minimum">
+              <span class="field-error-msg">Le mot de passe doit contenir au moins 8 caractères.</span>
+            </div>
           </div>
           <div class="consent-box">
             <input type="checkbox" id="consentCheck">
             <label for="consentCheck">J'accepte les <a href="#" style="color:var(--navy); font-weight:700; text-decoration:underline;">conditions d'utilisation</a>, la <a href="#" style="color:var(--navy); font-weight:700; text-decoration:underline;">politique de confidentialité</a> et je confirme que ma démarche s'inscrit dans un projet de mariage sérieux.</label>
           </div>
+          <p id="signupError" style="color:var(--danger); font-size:.85rem; margin-top:14px; display:none;"></p>
           <div class="form-actions" style="margin-top:26px;">
-            <button class="btn btn-outline-navy prev-step">← Retour</button>
-            <button class="btn btn-gold" id="submitInscription">Créer mon profil ✓</button>
+            <button type="button" class="btn btn-outline-navy prev-step">← Retour</button>
+            <button type="button" class="btn btn-gold" id="submitInscription">Créer mon profil ✓</button>
           </div>
         </div>
 
@@ -664,242 +704,371 @@ footer{background:var(--navy-deep); color:rgba(251,247,239,.7); padding:70px 0 3
     </div>
 
     <div id="successPanel" class="form-shell">
-      <div style="width:76px; height:76px; border-radius:50%; background:#e7f2ec; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
+      <div id="successIconOk" style="width:76px; height:76px; border-radius:50%; background:#e7f2ec; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#4C8B6B" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
-      <h2>Profil créé avec succès !</h2>
-      <p style="color:var(--muted); max-width:440px; margin:16px auto 30px;">Votre profil est en cours de vérification par notre équipe. Vous recevrez une notification dès qu'il sera validé et visible par les autres membres.</p>
-      <a href="mon-profil.html" class="btn btn-navy">Accéder à mon espace</a>
+      <h2 id="successTitle">Profil créé avec succès !</h2>
+      <p id="successText" style="color:var(--muted); max-width:440px; margin:16px auto 30px;">Votre profil est en cours de vérification par notre équipe. Vous recevrez une notification dès qu'il sera validé et visible par les autres membres.</p>
+      <a href="mon-profil.html" class="btn btn-navy" id="successCta">Accéder à mon espace</a>
     </div>
 
   </div>
 </section>
 
 <div id="footer-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// Nikaakh.sn — interactions front-end (démo statique, sans backend réel)
+/* ============================================================
+   Nikaakh.sn — Inscription, connectée à Supabase
+   ------------------------------------------------------------
+   PRÉREQUIS SUPABASE (à exécuter en plus de ceux de mon-profil.html) :
+
+   1) Table `profiles` COMPLÈTE (remplace/complète celle donnée
+      précédemment — colonnes ajoutées : sexe, telephone,
+      preference_situation) :
+
+      create table if not exists public.profiles (
+        id uuid primary key references auth.users(id) on delete cascade,
+        prenom text,
+        nom text,
+        sexe text,
+        date_naissance date,
+        ville text,
+        region text,
+        profession text,
+        situation_matrimoniale text,
+        interests text[] default '{}',
+        description text,
+        photo_url text,
+        telephone text,
+        age_recherche text,
+        region_recherchee text,
+        preference_situation text,
+        profil_visible boolean default true,
+        afficher_age boolean default true,
+        masquer_connexion boolean default false,
+        is_verified boolean default false,
+        updated_at timestamptz default now(),
+        created_at timestamptz default now()
+      );
+
+      alter table public.profiles enable row level security;
+
+      create policy "Un membre peut lire son propre profil"
+        on public.profiles for select using (auth.uid() = id);
+      create policy "Un membre peut modifier son propre profil"
+        on public.profiles for update using (auth.uid() = id);
+      create policy "Un membre peut créer sa propre ligne profil"
+        on public.profiles for insert with check (auth.uid() = id);
+
+   2) Trigger qui crée AUTOMATIQUEMENT la ligne `profiles` dès que
+      Supabase crée l'utilisateur dans auth.users — indispensable
+      car juste après l'inscription (avant confirmation de l'e-mail),
+      le client n'a pas encore de session pour insérer lui-même :
+
+      create or replace function public.handle_new_user()
+      returns trigger as $$
+      begin
+        insert into public.profiles (
+          id, prenom, sexe, date_naissance, region, ville, profession,
+          situation_matrimoniale, interests, description, telephone,
+          age_recherche, region_recherchee, preference_situation
+        )
+        values (
+          new.id,
+          new.raw_user_meta_data->>'prenom',
+          new.raw_user_meta_data->>'sexe',
+          nullif(new.raw_user_meta_data->>'date_naissance','')::date,
+          new.raw_user_meta_data->>'region',
+          new.raw_user_meta_data->>'ville',
+          new.raw_user_meta_data->>'profession',
+          new.raw_user_meta_data->>'situation_matrimoniale',
+          coalesce(
+            (select array(select jsonb_array_elements_text(new.raw_user_meta_data->'interests'))),
+            '{}'
+          ),
+          new.raw_user_meta_data->>'description',
+          new.raw_user_meta_data->>'telephone',
+          new.raw_user_meta_data->>'age_recherche',
+          new.raw_user_meta_data->>'region_recherchee',
+          new.raw_user_meta_data->>'preference_situation'
+        )
+        on conflict (id) do nothing;
+        return new;
+      end;
+      $$ language plpgsql security definer set search_path = public;
+
+      drop trigger if exists on_auth_user_created on auth.users;
+      create trigger on_auth_user_created
+        after insert on auth.users
+        for each row execute procedure public.handle_new_user();
+
+   3) Bucket Storage public "avatars" (voir mon-profil.html pour le détail).
+
+   4) Remplacer SUPABASE_URL / SUPABASE_ANON_KEY ci-dessous (les mêmes
+      valeurs que sur les autres pages du site).
+
+   5) Dans Authentication → Settings, si "Confirm email" est activé,
+      l'utilisateur devra cliquer le lien reçu par e-mail avant de
+      pouvoir se connecter : ce script gère les deux cas (session
+      immédiate ou confirmation différée).
+   ============================================================ */
+
+const SUPABASE_URL = 'https://yoixssfjtxrfcqrutcgv.supabase.co/rest/v1/';
+const SUPABASE_ANON_KEY = 'sb_publishable_mp--qt2kywTEhaBYjN3Afw_6-J6X_Bc';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let pendingPhotoFile = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+  initNavToggle();
+  initStepper();
+  initInterestPills();
+  initPhotoZone();
+  initSubmit();
+});
 
-  // --- Menu mobile ---
+/* ---------------- Menu mobile ---------------- */
+function initNavToggle() {
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
-  if (toggle && links) {
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+  if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('open'));
+}
+
+/* ---------------- Navigation entre étapes + validation ---------------- */
+const stepPanels = () => document.querySelectorAll('.step-panel');
+const spDots = () => document.querySelectorAll('.sp-dot');
+let currentStep = 0;
+
+function initStepper() {
+  document.querySelectorAll('.next-step').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentStep === 0 && !validateStep1()) return;
+      goStep(currentStep + 1);
+    });
+  });
+  document.querySelectorAll('.prev-step').forEach(btn => {
+    btn.addEventListener('click', () => goStep(currentStep - 1));
+  });
+}
+
+function goStep(n) {
+  const panels = stepPanels();
+  if (n < 0 || n >= panels.length) return;
+  panels[currentStep].classList.remove('show');
+  currentStep = n;
+  panels[currentStep].classList.add('show');
+  spDots().forEach((d, i) => {
+    d.classList.toggle('active', i === currentStep);
+    d.classList.toggle('done', i < currentStep);
+  });
+  window.scrollTo({ top: document.querySelector('.form-shell').offsetTop - 100, behavior: 'smooth' });
+}
+
+function markError(input, show) {
+  input.classList.toggle('field-error', show);
+  const msg = input.parentElement.querySelector('.field-error-msg');
+  if (msg) msg.classList.toggle('show', show);
+}
+
+function validateStep1() {
+  let ok = true;
+  const prenom = document.getElementById('i_prenom');
+  const date = document.getElementById('i_date_naissance');
+  const ville = document.getElementById('i_ville');
+
+  const prenomOk = prenom.value.trim().length > 0;
+  markError(prenom, !prenomOk);
+  ok = ok && prenomOk;
+
+  const age = calculateAge(date.value);
+  const dateOk = age !== null && age >= 18;
+  markError(date, !dateOk);
+  ok = ok && dateOk;
+
+  const villeOk = ville.value.trim().length > 0;
+  markError(ville, !villeOk);
+  ok = ok && villeOk;
+
+  if (!ok) showToast('⚠️ Merci de compléter les champs requis');
+  return ok;
+}
+
+function validateStep4() {
+  let ok = true;
+  const email = document.getElementById('i_email');
+  const password = document.getElementById('i_password');
+  const consent = document.getElementById('consentCheck');
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+  markError(email, !emailOk);
+  ok = ok && emailOk;
+
+  const pwdOk = password.value.length >= 8;
+  markError(password, !pwdOk);
+  ok = ok && pwdOk;
+
+  if (!consent.checked) {
+    showToast("⚠️ Veuillez accepter les conditions d'utilisation");
+    ok = false;
   }
 
-  // --- Like / Passer sur les cartes profils ---
-  document.querySelectorAll('.icon-btn.like').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const wasLiked = btn.classList.contains('liked');
-      btn.classList.toggle('liked');
-      btn.innerHTML = wasLiked
-        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>`
-        : `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>`;
-      if (!wasLiked) {
-        showToast('💛 Profil ajouté à vos favoris');
-        maybeMatch();
-      }
-    });
-  });
+  if (!ok) showToast('⚠️ Merci de compléter les champs requis');
+  return ok;
+}
 
-  document.querySelectorAll('.icon-btn.pass').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.pcard');
-      if (card) { card.style.transition = 'all .35s ease'; card.style.opacity = '0'; card.style.transform = 'scale(.9)'; setTimeout(() => card.style.display = 'none', 350); }
-    });
-  });
+function calculateAge(dateStr) {
+  if (!dateStr) return null;
+  const birth = new Date(dateStr);
+  if (isNaN(birth.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
 
-  function maybeMatch() {
-    if (Math.random() > 0.6) {
-      const modal = document.getElementById('matchModal');
-      if (modal) modal.classList.add('show');
+/* ---------------- Centres d'intérêt (style actif sur le pill) ---------------- */
+function initInterestPills() {
+  document.querySelectorAll('#interestGroup input[type=checkbox]').forEach(cb => {
+    const sync = () => cb.closest('.check-pill').classList.toggle('active', cb.checked);
+    cb.addEventListener('change', sync);
+    sync();
+  });
+}
+
+/* ---------------- Zone photo (stockée en mémoire, envoyée après inscription) ---------------- */
+function initPhotoZone() {
+  const input = document.getElementById('i_photo');
+  input.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('⚠️ La photo dépasse 5 Mo');
+      input.value = '';
+      return;
     }
-  }
-  window.closeMatch = () => document.getElementById('matchModal')?.classList.remove('show');
+    pendingPhotoFile = file;
+    document.getElementById('uploadZoneText').textContent = `✓ ${file.name}`;
+  });
+}
 
-  // --- Toast ---
-  window.showToast = (msg) => {
-    let t = document.querySelector('.toast');
-    if (!t) {
-      t = document.createElement('div');
-      t.className = 'toast';
-      t.style.cssText = 'position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#0B1F3A;color:#F3E6C6;padding:14px 24px;border-radius:100px;font-size:.86rem;font-weight:600;z-index:999;box-shadow:0 14px 30px -10px rgba(0,0,0,.4);transition:opacity .3s;';
-      document.body.appendChild(t);
+/* ---------------- Soumission finale : création réelle du compte ---------------- */
+function initSubmit() {
+  const btn = document.getElementById('submitInscription');
+  btn.addEventListener('click', async () => {
+    if (!validateStep4()) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Création en cours…';
+    document.getElementById('signupError').style.display = 'none';
+
+    const interests = Array.from(document.querySelectorAll('#interestGroup input:checked')).map(c => c.value);
+    const sexe = document.querySelector('input[name="sexe"]:checked')?.value || '';
+    const preferenceSituation = document.querySelector('input[name="pref_situation"]:checked')?.value || '';
+
+    const metadata = {
+      prenom: document.getElementById('i_prenom').value.trim(),
+      sexe,
+      date_naissance: document.getElementById('i_date_naissance').value || '',
+      region: document.getElementById('i_region').value,
+      ville: document.getElementById('i_ville').value.trim(),
+      profession: document.getElementById('i_profession').value.trim(),
+      situation_matrimoniale: document.getElementById('i_situation').value,
+      interests,
+      description: document.getElementById('i_description').value.trim(),
+      telephone: document.getElementById('i_telephone').value.trim(),
+      age_recherche: document.getElementById('i_age_recherche').value.trim(),
+      region_recherchee: document.getElementById('i_region_recherchee').value,
+      preference_situation: preferenceSituation,
+    };
+
+    const email = document.getElementById('i_email').value.trim();
+    const password = document.getElementById('i_password').value;
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: metadata }
+      });
+
+      if (error) throw error;
+
+      if (data.session && data.user) {
+        // Confirmation par e-mail désactivée : session active immédiatement.
+        if (pendingPhotoFile) {
+          await uploadPhoto(data.user.id, pendingPhotoFile);
+        }
+        showSuccess({
+          confirmed: true,
+          title: 'Profil créé avec succès !',
+          text: "Votre profil est en cours de vérification par notre équipe. Vous recevrez une notification dès qu'il sera validé et visible par les autres membres.",
+        });
+      } else {
+        // Confirmation par e-mail activée : pas de session tant que le lien n'est pas cliqué.
+        showSuccess({
+          confirmed: false,
+          title: 'Vérifiez votre boîte e-mail 📩',
+          text: `Un e-mail de confirmation a été envoyé à ${email}. Cliquez sur le lien qu'il contient pour activer votre compte, puis connectez-vous pour ajouter votre photo et finaliser votre profil.`,
+        });
+      }
+    } catch (err) {
+      const msg = err.message || "Une erreur est survenue, veuillez réessayer.";
+      const errBox = document.getElementById('signupError');
+      errBox.textContent = msg.includes('already registered') || msg.includes('already exists')
+        ? 'Un compte existe déjà avec cette adresse e-mail.'
+        : msg;
+      errBox.style.display = 'block';
+      showToast('❌ ' + errBox.textContent);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Créer mon profil ✓';
     }
-    t.textContent = msg;
-    t.style.opacity = '1';
-    clearTimeout(window._toastTimer);
-    window._toastTimer = setTimeout(() => t.style.opacity = '0', 2200);
-  };
-
-  // --- Filtres (chips) ---
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => chip.classList.toggle('active'));
   });
-  const rangeMin = document.getElementById('ageMin');
-  const rangeMax = document.getElementById('ageMax');
-  const rangeOut = document.getElementById('ageOut');
-  function updateRange() {
-    if (rangeMin && rangeMax && rangeOut) rangeOut.textContent = `${rangeMin.value} – ${rangeMax.value} ans`;
+}
+
+async function uploadPhoto(userId, file) {
+  const ext = file.name.split('.').pop();
+  const path = `${userId}/avatar.${ext}`;
+  const { error: uploadError } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
+  if (uploadError) { showToast("La photo n'a pas pu être envoyée : " + uploadError.message); return; }
+  const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path);
+  await supabase.from('profiles').update({ photo_url: urlData.publicUrl + '?t=' + Date.now() }).eq('id', userId);
+}
+
+function showSuccess({ confirmed, title, text }) {
+  document.getElementById('inscriptionForm').style.display = 'none';
+  document.getElementById('successTitle').textContent = title;
+  document.getElementById('successText').textContent = text;
+  const cta = document.getElementById('successCta');
+  if (confirmed) {
+    cta.textContent = 'Accéder à mon espace';
+    cta.href = 'mon-profil.html';
+  } else {
+    cta.textContent = "J'ai confirmé, me connecter";
+    cta.href = 'mon-profil.html';
   }
-  [rangeMin, rangeMax].forEach(r => r && r.addEventListener('input', updateRange));
-  updateRange();
+  document.getElementById('successPanel').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  const applyBtn = document.getElementById('applyFilters');
-  if (applyBtn) applyBtn.addEventListener('click', () => showToast('🔍 Filtres appliqués — profils mis à jour'));
-
-  // --- Messagerie ---
-  document.querySelectorAll('.conv-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.conv-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      const name = item.querySelector('strong')?.textContent || '';
-      const img = item.querySelector('img')?.src || '';
-      const chatName = document.getElementById('chatName');
-      const chatImg = document.getElementById('chatImg');
-      if (chatName) chatName.textContent = name;
-      if (chatImg) chatImg.src = img;
-      const dot = item.querySelector('.unread-dot');
-      if (dot) dot.remove();
-    });
-  });
-
-  const chatForm = document.getElementById('chatInput');
-  const chatBody = document.getElementById('chatBody');
-  if (chatForm && chatBody) {
-    chatForm.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && chatForm.value.trim()) {
-        appendBubble(chatForm.value.trim(), 'out');
-        chatForm.value = '';
-        chatBody.scrollTop = chatBody.scrollHeight;
-        setTimeout(() => {
-          appendBubble("D'accord, merci pour votre message 🙏 Je vous réponds bientôt.", 'in');
-          chatBody.scrollTop = chatBody.scrollHeight;
-        }, 900);
-      }
-    });
-    const sendBtn = document.getElementById('sendBtn');
-    if (sendBtn) sendBtn.addEventListener('click', () => {
-      if (chatForm.value.trim()) {
-        appendBubble(chatForm.value.trim(), 'out');
-        chatForm.value = '';
-        chatBody.scrollTop = chatBody.scrollHeight;
-      }
-    });
+/* ---------------- Toast ---------------- */
+function showToast(msg) {
+  let t = document.querySelector('.toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.className = 'toast';
+    t.style.cssText = 'position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#0B1F3A;color:#F3E6C6;padding:14px 24px;border-radius:100px;font-size:.86rem;font-weight:600;z-index:999;box-shadow:0 14px 30px -10px rgba(0,0,0,.4);transition:opacity .3s;max-width:90vw;text-align:center;';
+    document.body.appendChild(t);
   }
-  function appendBubble(text, dir) {
-    const div = document.createElement('div');
-    div.className = 'bubble ' + dir;
-    const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-    div.innerHTML = `${escapeHtml(text)}<span class="bubble-time">${time}</span>`;
-    chatBody.appendChild(div);
-  }
-  function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-
-  window.reportUser = () => showToast('🚩 Signalement envoyé à la modération');
-  window.blockUser = () => showToast('⛔ Utilisateur bloqué');
-
-  // --- Mon profil : switches ---
-  document.querySelectorAll('.switch').forEach(sw => {
-    sw.addEventListener('click', () => {
-      sw.classList.toggle('on');
-      showToast(sw.classList.contains('on') ? '✅ Option activée' : '⏸️ Option désactivée');
-    });
-  });
-
-  // --- Inscription : stepper ---
-  const stepPanels = document.querySelectorAll('.step-panel');
-  const spDots = document.querySelectorAll('.sp-dot');
-  let currentStep = 0;
-  function goStep(n) {
-    if (n < 0 || n >= stepPanels.length) return;
-    stepPanels[currentStep]?.classList.remove('show');
-    currentStep = n;
-    stepPanels[currentStep]?.classList.add('show');
-    spDots.forEach((d, i) => {
-      d.classList.toggle('active', i === currentStep);
-      d.classList.toggle('done', i < currentStep);
-    });
-    window.scrollTo({ top: document.querySelector('.form-shell')?.offsetTop - 100, behavior: 'smooth' });
-  }
-  document.querySelectorAll('.next-step').forEach(btn => btn.addEventListener('click', () => goStep(currentStep + 1)));
-  document.querySelectorAll('.prev-step').forEach(btn => btn.addEventListener('click', () => goStep(currentStep - 1)));
-  const submitBtn = document.getElementById('submitInscription');
-  if (submitBtn) submitBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const consent = document.getElementById('consentCheck');
-    if (consent && !consent.checked) { showToast('⚠️ Veuillez accepter les conditions d\'utilisation'); return; }
-    document.getElementById('inscriptionForm').style.display = 'none';
-    document.getElementById('successPanel').style.display = 'block';
-  });
-
-  // --- Upload zone preview text ---
-  document.querySelectorAll('.upload-zone input[type=file]').forEach(inp => {
-    inp.addEventListener('change', () => {
-      const zone = inp.closest('.upload-zone');
-      const p = zone.querySelector('p');
-      if (inp.files.length && p) p.textContent = `${inp.files.length} photo(s) sélectionnée(s) ✓`;
-    });
-  });
-
-  // --- Admin: tabs ---
-  document.querySelectorAll('.admin-tabs').forEach(tabGroup => {
-    const buttons = tabGroup.querySelectorAll('button');
-    buttons.forEach(b => b.addEventListener('click', () => {
-      buttons.forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      const target = b.dataset.target;
-      tabGroup.parentElement.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
-      const el = document.getElementById(target);
-      if (el) el.style.display = 'block';
-    }));
-  });
-
-  // --- Admin: row actions demo ---
-  document.querySelectorAll('.row-actions button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const row = btn.closest('tr');
-      if (btn.classList.contains('approve')) {
-        const pill = row.querySelector('.status-pill');
-        if (pill) { pill.className = 'status-pill ok'; pill.textContent = 'Vérifié'; }
-        showToast('✅ Profil vérifié avec succès');
-      } else if (btn.classList.contains('reject')) {
-        const pill = row.querySelector('.status-pill');
-        if (pill) { pill.className = 'status-pill blocked'; pill.textContent = 'Rejeté'; }
-        showToast('❌ Profil rejeté');
-      } else if (btn.classList.contains('suspend')) {
-        row.style.opacity = '.4';
-        showToast('⏸️ Compte suspendu');
-      } else if (btn.classList.contains('view')) {
-        showToast('👁️ Ouverture du profil…');
-      }
-    });
-  });
-
-  // --- Pricing toggle (mensuel/annuel) ---
-  const billToggle = document.getElementById('billToggle');
-  if (billToggle) {
-    billToggle.addEventListener('click', () => {
-      billToggle.classList.toggle('on');
-      document.querySelectorAll('.price-amount').forEach(el => {
-        const monthly = el.dataset.monthly, yearly = el.dataset.yearly;
-        el.textContent = billToggle.classList.contains('on') ? yearly : monthly;
-      });
-      document.querySelectorAll('.price-period').forEach(el => {
-        el.textContent = billToggle.classList.contains('on') ? '/ an' : '/ mois';
-      });
-    });
-  }
-
-  // --- Reveal on scroll ---
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('reveal'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.step-card, .pcard, .testi-card, .price-card').forEach(el => io.observe(el));
-
-});
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.style.opacity = '0', 2800);
+}
 
 </script>
 <script>
