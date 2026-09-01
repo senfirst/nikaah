@@ -723,102 +723,28 @@ footer{background:var(--navy-deep); color:rgba(251,247,239,.7); padding:70px 0 3
    Nikaakh.sn — Inscription, connectée à Supabase
    ------------------------------------------------------------
    PRÉREQUIS SUPABASE (à exécuter en plus de ceux de mon-profil.html) :
-
-   1) Table `profiles` COMPLÈTE (remplace/complète celle donnée
-      précédemment — colonnes ajoutées : sexe, telephone,
-      preference_situation) :
-
-      create table if not exists public.profiles (
-        id uuid primary key references auth.users(id) on delete cascade,
-        prenom text,
-        nom text,
-        sexe text,
-        date_naissance date,
-        ville text,
-        region text,
-        profession text,
-        situation_matrimoniale text,
-        interests text[] default '{}',
-        description text,
-        photo_url text,
-        telephone text,
-        age_recherche text,
-        region_recherchee text,
-        preference_situation text,
-        profil_visible boolean default true,
-        afficher_age boolean default true,
-        masquer_connexion boolean default false,
-        is_verified boolean default false,
-        updated_at timestamptz default now(),
-        created_at timestamptz default now()
-      );
-
-      alter table public.profiles enable row level security;
-
-      create policy "Un membre peut lire son propre profil"
-        on public.profiles for select using (auth.uid() = id);
-      create policy "Un membre peut modifier son propre profil"
-        on public.profiles for update using (auth.uid() = id);
-      create policy "Un membre peut créer sa propre ligne profil"
-        on public.profiles for insert with check (auth.uid() = id);
-
-   2) Trigger qui crée AUTOMATIQUEMENT la ligne `profiles` dès que
-      Supabase crée l'utilisateur dans auth.users — indispensable
-      car juste après l'inscription (avant confirmation de l'e-mail),
-      le client n'a pas encore de session pour insérer lui-même :
-
-      create or replace function public.handle_new_user()
-      returns trigger as $$
-      begin
-        insert into public.profiles (
-          id, prenom, sexe, date_naissance, region, ville, profession,
-          situation_matrimoniale, interests, description, telephone,
-          age_recherche, region_recherchee, preference_situation
-        )
-        values (
-          new.id,
-          new.raw_user_meta_data->>'prenom',
-          new.raw_user_meta_data->>'sexe',
-          nullif(new.raw_user_meta_data->>'date_naissance','')::date,
-          new.raw_user_meta_data->>'region',
-          new.raw_user_meta_data->>'ville',
-          new.raw_user_meta_data->>'profession',
-          new.raw_user_meta_data->>'situation_matrimoniale',
-          coalesce(
-            (select array(select jsonb_array_elements_text(new.raw_user_meta_data->'interests'))),
-            '{}'
-          ),
-          new.raw_user_meta_data->>'description',
-          new.raw_user_meta_data->>'telephone',
-          new.raw_user_meta_data->>'age_recherche',
-          new.raw_user_meta_data->>'region_recherchee',
-          new.raw_user_meta_data->>'preference_situation'
-        )
-        on conflict (id) do nothing;
-        return new;
-      end;
-      $$ language plpgsql security definer set search_path = public;
-
-      drop trigger if exists on_auth_user_created on auth.users;
-      create trigger on_auth_user_created
-        after insert on auth.users
-        for each row execute procedure public.handle_new_user();
-
-   3) Bucket Storage public "avatars" (voir mon-profil.html pour le détail).
-
-   4) Remplacer SUPABASE_URL / SUPABASE_ANON_KEY ci-dessous (les mêmes
-      valeurs que sur les autres pages du site).
-
-   5) Dans Authentication → Settings, si "Confirm email" est activé,
-      l'utilisateur devra cliquer le lien reçu par e-mail avant de
-      pouvoir se connecter : ce script gère les deux cas (session
-      immédiate ou confirmation différée).
+   (voir commentaires détaillés dans la version précédente du fichier)
    ============================================================ */
 
-const SUPABASE_URL = 'https://yoixssfjtxrfcqrutcgv.supabase.co/rest/v1/';
+const SUPABASE_URL = 'https://yoixssfjtxrfcqrutcgv.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_mp--qt2kywTEhaBYjN3Afw_6-J6X_Bc';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// FIX 1 : l'initialisation de Supabase est maintenant protégée par un
+// try/catch. Avant, si le script CDN ne se chargeait pas correctement
+// (bloqueur de pub, CSP de l'hébergeur, lenteur réseau...), la ligne
+// `window.supabase.createClient(...)` plantait AVANT même que le
+// `DOMContentLoaded` ci-dessous ne soit enregistré : tout le JS de la
+// page s'arrêtait, y compris la navigation entre étapes du formulaire
+// (d'où le blocage à l'étape 1). Le formulaire fonctionne maintenant
+// même si Supabase échoue à s'initialiser — seule la création finale
+// du compte affichera une erreur claire dans ce cas.
+let supabase = null;
+try {
+  if (!window.supabase) throw new Error('Le script Supabase (CDN) ne s\'est pas chargé.');
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch (e) {
+  console.error('[Nikaakh.sn] Échec d\'initialisation de Supabase :', e);
+}
 
 let pendingPhotoFile = null;
 
@@ -960,6 +886,16 @@ function initSubmit() {
   const btn = document.getElementById('submitInscription');
   btn.addEventListener('click', async () => {
     if (!validateStep4()) return;
+
+    // FIX 2 : si Supabase n'a pas pu s'initialiser, on prévient
+    // clairement au lieu de planter silencieusement.
+    if (!supabase) {
+      const errBox = document.getElementById('signupError');
+      errBox.textContent = "Le service de création de compte est momentanément indisponible. Merci de réessayer dans un instant (ou de vérifier votre connexion internet).";
+      errBox.style.display = 'block';
+      showToast('❌ Service indisponible, réessayez.');
+      return;
+    }
 
     btn.disabled = true;
     btn.textContent = 'Création en cours…';
