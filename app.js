@@ -1,13 +1,13 @@
 const SUPABASE_URL = "https://yoixssfjtxrfcqurutcg.supabase.co";
 const SUPABASE_KEY = "sb_publishable_mp--qt2kywTEhaBYjN3Afw_6-J6X_Bc";
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
 
 async function testerConnexion() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from("profiles")
         .select("*")
         .limit(5);
