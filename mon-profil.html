@@ -532,362 +532,655 @@ footer{background:var(--navy-deep); color:rgba(251,247,239,.7); padding:70px 0 3
   </div>
 </nav>
 
+
+
+
+
+
+```html
+<!-- =====================================================
+     EN-TÊTE DU PROFIL
+     ===================================================== -->
+
 <header class="page-head">
   <div class="container">
     <div class="crumbs">Accueil / Mon profil</div>
-    <h1>Bienvenue, Aïssatou 👋</h1>
-    <p>Gérez vos informations, vos photos et vos paramètres de sécurité.</p>
+
+    <h1 id="welcomeName">
+      Bienvenue 👋
+    </h1>
+
+    <p>
+      Gérez vos informations, vos photos et vos paramètres de sécurité.
+    </p>
   </div>
 </header>
+
+
+<!-- =====================================================
+     PROFIL
+     ===================================================== -->
 
 <section style="padding-top:44px;">
   <div class="container acc-layout">
 
+    <!-- MENU GAUCHE -->
     <aside class="acc-side">
+
       <div class="acc-profile">
-        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop" alt="">
-        <h4>Aïssatou Diop</h4>
-        <span>26 ans — Dakar</span>
-        <div style="margin-top:10px;"><span class="verif-badge" style="position:static; display:inline-flex;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Profil vérifié</span></div>
+
+        <img
+          id="profilePhoto"
+          src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop"
+          alt="Photo de profil">
+
+        <h4 id="profileName">
+          Chargement...
+        </h4>
+
+        <span id="profileDetails">
+          Chargement...
+        </span>
+
+        <div style="margin-top:10px;">
+          <span
+            class="verif-badge"
+            style="position:static; display:inline-flex;">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5">
+
+              <path d="M20 6 9 17l-5-5"/>
+
+            </svg>
+
+            Profil vérifié
+
+          </span>
+        </div>
+
       </div>
+
+
       <nav class="acc-nav">
-        <a href="#" class="nav-item active" data-target="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>Mes informations</a>
-        <a href="#" class="nav-item" data-target="photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 15-5-4-4 3-3-2-6 5"/></svg>Mes photos</a>
-        <a href="#" class="nav-item" data-target="prefs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 8v4l3 2"/></svg>Préférences</a>
-        <a href="#" class="nav-item" data-target="confid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.4 8.5 8 9 4.6-.5 8-4 8-9V6l-8-3Z"/></svg>Confidentialité</a>
-        <a href="#" class="nav-item" data-target="secu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Sécurité</a>
-        <a href="#" class="nav-item danger" data-target="delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>Supprimer mon compte</a>
+
+        <a href="#"
+           class="nav-item active"
+           data-target="info">
+
+          👤 Mes informations
+
+        </a>
+
+        <a href="#"
+           class="nav-item"
+           data-target="photos">
+
+          📷 Mes photos
+
+        </a>
+
+        <a href="#"
+           class="nav-item"
+           data-target="prefs">
+
+          ❤️ Préférences
+
+        </a>
+
+        <a href="#"
+           class="nav-item"
+           data-target="confid">
+
+          🔒 Confidentialité
+
+        </a>
+
+        <a href="#"
+           class="nav-item"
+           data-target="secu">
+
+          🛡️ Sécurité
+
+        </a>
+
+        <a href="#"
+           class="nav-item danger"
+           data-target="delete">
+
+          🗑️ Supprimer mon compte
+
+        </a>
+
       </nav>
+
     </aside>
 
+
+    <!-- =================================================
+         CONTENU
+         ================================================= -->
+
     <div>
-      <!-- INFO -->
+
+
+      <!-- =================================================
+           INFORMATIONS
+           ================================================= -->
+
       <div class="acc-panel show" id="info">
+
         <div class="panel">
+
           <h3>Mes informations</h3>
-          <p class="sub">Ces informations sont visibles par les membres après vérification.</p>
+
+          <p class="sub">
+            Ces informations sont visibles par les membres après vérification.
+          </p>
+
+
           <div class="form-grid">
-            <div class="field"><label>Prénom</label><input type="text" value="Aïssatou"></div>
-            <div class="field"><label>Âge</label><input type="text" value="26 ans"></div>
-            <div class="field"><label>Ville</label><input type="text" value="Dakar"></div>
-            <div class="field"><label>Région</label><select><option>Dakar</option><option>Thiès</option></select></div>
-            <div class="field"><label>Profession</label><input type="text" value="Sage-femme"></div>
-            <div class="field"><label>Situation matrimoniale</label><select><option>Célibataire</option></select></div>
-            <div class="field full"><label>Centres d'intérêt</label>
-              <div class="chip-group"><span class="chip active">Religion</span><span class="chip active">Famille</span><span class="chip active">Lecture</span><span class="chip">Voyage</span><span class="chip">Sport</span></div>
+
+            <div class="field">
+
+              <label>Prénom</label>
+
+              <input
+                id="prenom"
+                type="text"
+                placeholder="Votre prénom">
+
             </div>
-            <div class="field full"><label>Présentation</label><textarea>Discrète et sérieuse, je recherche un compagnon de vie partageant les mêmes valeurs pour fonder un foyer stable et durable.</textarea></div>
+
+
+            <div class="field">
+
+              <label>Nom</label>
+
+              <input
+                id="nom"
+                type="text"
+                placeholder="Votre nom">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Date de naissance</label>
+
+              <input
+                id="date_naissance"
+                type="date">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Ville</label>
+
+              <input
+                id="ville"
+                type="text"
+                placeholder="Votre ville">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Région</label>
+
+              <select id="region">
+
+                <option value="Dakar">
+                  Dakar
+                </option>
+
+                <option value="Thiès">
+                  Thiès
+                </option>
+
+                <option value="Saint-Louis">
+                  Saint-Louis
+                </option>
+
+                <option value="Diourbel">
+                  Diourbel
+                </option>
+
+                <option value="Kaolack">
+                  Kaolack
+                </option>
+
+                <option value="Ziguinchor">
+                  Ziguinchor
+                </option>
+
+                <option value="Louga">
+                  Louga
+                </option>
+
+                <option value="Tambacounda">
+                  Tambacounda
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Profession</label>
+
+              <input
+                id="profession"
+                type="text"
+                placeholder="Votre profession">
+
+            </div>
+
+
+            <div class="field full">
+
+              <label>
+                Situation matrimoniale
+              </label>
+
+              <select id="situation_matrimoniale">
+
+                <option value="Célibataire">
+                  Célibataire
+                </option>
+
+                <option value="Divorcé(e)">
+                  Divorcé(e)
+                </option>
+
+                <option value="Veuf / Veuve">
+                  Veuf / Veuve
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="field full">
+
+              <label>
+                Centres d'intérêt
+              </label>
+
+              <div class="chip-group">
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Religion">
+                  Religion
+                </button>
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Famille">
+                  Famille
+                </button>
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Lecture">
+                  Lecture
+                </button>
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Voyage">
+                  Voyage
+                </button>
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Sport">
+                  Sport
+                </button>
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Cuisine">
+                  Cuisine
+                </button>
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Entrepreneuriat">
+                  Entrepreneuriat
+                </button>
+
+                <button type="button"
+                        class="chip interest"
+                        data-value="Musique">
+                  Musique
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="field full">
+
+              <label>
+                Présentation
+              </label>
+
+              <textarea
+                id="description"
+                placeholder="Présentez-vous..."></textarea>
+
+            </div>
+
           </div>
-          <button class="btn btn-navy">Enregistrer les modifications</button>
+
+
+          <button
+            id="saveProfile"
+            class="btn btn-navy">
+
+            Enregistrer les modifications
+
+          </button>
+
         </div>
+
       </div>
 
-      <!-- PHOTOS -->
+
+      <!-- =================================================
+           PHOTOS
+           ================================================= -->
+
       <div class="acc-panel" id="photos">
+
         <div class="panel">
+
           <h3>Mes photos</h3>
-          <p class="sub">Ajoutez jusqu'à 6 photos. Elles sont vérifiées avant publication.</p>
+
+          <p class="sub">
+            Ajoutez vos photos de profil.
+          </p>
+
           <div class="photo-manager">
-            <div class="photo-slot"><img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=300&fit=crop" alt=""><span class="main-tag">Principale</span></div>
-            <div class="photo-slot"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop" alt=""></div>
-            <label class="photo-slot empty"><input type="file" accept="image/*" hidden>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+
+            <label class="photo-slot empty">
+
+              <input
+                id="photoInput"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden>
+
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8">
+
+                <path d="M12 5v14"/>
+                <path d="M5 12h14"/>
+
+              </svg>
+
             </label>
-            <label class="photo-slot empty"><input type="file" accept="image/*" hidden>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
-            </label>
+
           </div>
+
+          <p style="margin-top:15px;color:var(--muted);font-size:.82rem;">
+            La gestion complète des photos peut être reliée à Supabase Storage.
+          </p>
+
         </div>
+
       </div>
 
-      <!-- PREFS -->
+
+      <!-- =================================================
+           PRÉFÉRENCES
+           ================================================= -->
+
       <div class="acc-panel" id="prefs">
+
         <div class="panel">
-          <h3>Préférences de recherche</h3>
-          <p class="sub">Ces critères affinent les profils qui vous sont suggérés.</p>
+
+          <h3>
+            Préférences de recherche
+          </h3>
+
+          <p class="sub">
+            Ces critères affinent les profils qui vous sont suggérés.
+          </p>
+
+
           <div class="form-grid">
-            <div class="field"><label>Tranche d'âge</label><input type="text" value="28 – 38 ans"></div>
-            <div class="field"><label>Région préférée</label><select><option>Toutes les régions</option><option>Dakar</option></select></div>
+
+            <div class="field">
+
+              <label>
+                Tranche d'âge
+              </label>
+
+              <input
+                id="age_recherche"
+                type="text"
+                placeholder="Ex : 25 – 35 ans">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Région préférée
+              </label>
+
+              <select id="region_recherchee">
+
+                <option value="Toutes les régions">
+                  Toutes les régions
+                </option>
+
+                <option value="Dakar">
+                  Dakar
+                </option>
+
+                <option value="Thiès">
+                  Thiès
+                </option>
+
+                <option value="Saint-Louis">
+                  Saint-Louis
+                </option>
+
+              </select>
+
+            </div>
+
           </div>
-          <button class="btn btn-navy">Enregistrer</button>
+
+
+          <button
+            id="savePreferences"
+            class="btn btn-navy">
+
+            Enregistrer
+
+          </button>
+
         </div>
+
       </div>
 
-      <!-- CONFIDENTIALITE -->
+
+      <!-- =================================================
+           CONFIDENTIALITÉ
+           ================================================= -->
+
       <div class="acc-panel" id="confid">
+
         <div class="panel">
+
           <h3>Confidentialité</h3>
-          <p class="sub">Contrôlez qui peut voir vos informations.</p>
-          <div class="toggle-row"><div><h5>Profil visible dans les recherches</h5><p>Votre profil apparaît dans les résultats des autres membres.</p></div><div class="switch on"></div></div>
-          <div class="toggle-row"><div><h5>Afficher mon âge exact</h5><p>Sinon, seule une tranche d'âge sera visible.</p></div><div class="switch on"></div></div>
-          <div class="toggle-row"><div><h5>Masquer ma dernière connexion</h5><p>Les autres membres ne verront pas votre statut « en ligne ».</p></div><div class="switch"></div></div>
-          <div class="toggle-row"><div><h5>Photos visibles uniquement après contact</h5><p>Vos photos ne s'affichent qu'après acceptation d'un échange.</p></div><div class="switch"></div></div>
-        </div>
-      </div>
 
-      <!-- SECURITE -->
-      <div class="acc-panel" id="secu">
-        <div class="panel">
-          <h3>Sécurité du compte</h3>
-          <p class="sub">Protégez l'accès à votre compte Nikaakh.sn.</p>
-          <div class="form-grid">
-            <div class="field"><label>Mot de passe actuel</label><input type="password" placeholder="••••••••"></div>
-            <div class="field"><label>Nouveau mot de passe</label><input type="password" placeholder="••••••••"></div>
+          <p class="sub">
+            Contrôlez qui peut voir vos informations.
+          </p>
+
+          <div class="toggle-row">
+            <div>
+              <h5>Profil visible dans les recherches</h5>
+              <p>
+                Votre profil apparaît dans les résultats des autres membres.
+              </p>
+            </div>
+
+            <div class="switch on"></div>
           </div>
-          <button class="btn btn-navy">Mettre à jour le mot de passe</button>
-          <div class="toggle-row" style="margin-top:26px;"><div><h5>Vérification en deux étapes</h5><p>Recevez un code par SMS à chaque connexion.</p></div><div class="switch on"></div></div>
-          <div class="toggle-row"><div><h5>Notifications de connexion</h5><p>Soyez alerté(e) en cas de connexion depuis un nouvel appareil.</p></div><div class="switch on"></div></div>
+
+
+          <div class="toggle-row">
+            <div>
+              <h5>Afficher mon âge exact</h5>
+              <p>
+                Sinon, seule une tranche d'âge sera visible.
+              </p>
+            </div>
+
+            <div class="switch on"></div>
+          </div>
+
+
+          <div class="toggle-row">
+            <div>
+              <h5>Masquer ma dernière connexion</h5>
+              <p>
+                Les autres membres ne verront pas votre statut.
+              </p>
+            </div>
+
+            <div class="switch"></div>
+          </div>
+
         </div>
+
       </div>
 
-      <!-- SUPPRESSION -->
-      <div class="acc-panel" id="delete">
-        <div class="panel danger-zone">
-          <h3>Supprimer mon compte</h3>
-          <p class="sub" style="color:#8a4a3a;">Cette action est irréversible. Toutes vos données, conversations et correspondances seront définitivement supprimées, conformément à notre politique de confidentialité.</p>
-          <label style="display:flex; gap:10px; align-items:flex-start; font-size:.86rem; color:var(--muted); margin-bottom:20px;">
-            <input type="checkbox" style="margin-top:3px;"> Je comprends que cette action est définitive et je souhaite supprimer mon compte Nikaakh.sn.
-          </label>
-          <button class="btn" style="background:var(--danger); color:#fff;">Supprimer définitivement mon compte</button>
+
+      <!-- =================================================
+           SÉCURITÉ
+           ================================================= -->
+
+      <div class="acc-panel" id="secu">
+
+        <div class="panel">
+
+          <h3>
+            Sécurité du compte
+          </h3>
+
+          <p class="sub">
+            Protégez l'accès à votre compte Nikaakh.sn.
+          </p>
+
+
+          <div class="form-grid">
+
+            <div class="field full">
+
+              <label>
+                Nouveau mot de passe
+              </label>
+
+              <input
+                id="newPassword"
+                type="password"
+                minlength="8"
+                placeholder="8 caractères minimum">
+
+            </div>
+
+          </div>
+
+
+          <button
+            id="updatePassword"
+            class="btn btn-navy">
+
+            Mettre à jour le mot de passe
+
+          </button>
+
         </div>
+
       </div>
+
+
+      <!-- =================================================
+           SUPPRESSION
+           ================================================= -->
+
+      <div class="acc-panel" id="delete">
+
+        <div class="panel danger-zone">
+
+          <h3>
+            Supprimer mon compte
+          </h3>
+
+          <p class="sub"
+             style="color:#8a4a3a;">
+
+            Cette action est irréversible.
+
+          </p>
+
+
+          <label
+            style="display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:var(--muted);margin-bottom:20px;">
+
+            <input
+              id="confirmDelete"
+              type="checkbox">
+
+            Je comprends que cette action est définitive.
+
+          </label>
+
+
+          <button
+            id="deleteAccount"
+            class="btn"
+            style="background:var(--danger);color:#fff;">
+
+            Supprimer définitivement mon compte
+
+          </button>
+
+        </div>
+
+      </div>
+
 
     </div>
+
   </div>
 </section>
-
-<div id="footer-placeholder"></div>
-<script>
-// Nikaakh.sn — interactions front-end (démo statique, sans backend réel)
-
-document.addEventListener('DOMContentLoaded', () => {
-
-  // --- Menu mobile ---
-  const toggle = document.querySelector('.nav-toggle');
-  const links = document.querySelector('.nav-links');
-  if (toggle && links) {
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
-  }
-
-  // --- Like / Passer sur les cartes profils ---
-  document.querySelectorAll('.icon-btn.like').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const wasLiked = btn.classList.contains('liked');
-      btn.classList.toggle('liked');
-      btn.innerHTML = wasLiked
-        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>`
-        : `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>`;
-      if (!wasLiked) {
-        showToast('💛 Profil ajouté à vos favoris');
-        maybeMatch();
-      }
-    });
-  });
-
-  document.querySelectorAll('.icon-btn.pass').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.pcard');
-      if (card) { card.style.transition = 'all .35s ease'; card.style.opacity = '0'; card.style.transform = 'scale(.9)'; setTimeout(() => card.style.display = 'none', 350); }
-    });
-  });
-
-  function maybeMatch() {
-    if (Math.random() > 0.6) {
-      const modal = document.getElementById('matchModal');
-      if (modal) modal.classList.add('show');
-    }
-  }
-  window.closeMatch = () => document.getElementById('matchModal')?.classList.remove('show');
-
-  // --- Toast ---
-  window.showToast = (msg) => {
-    let t = document.querySelector('.toast');
-    if (!t) {
-      t = document.createElement('div');
-      t.className = 'toast';
-      t.style.cssText = 'position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#0B1F3A;color:#F3E6C6;padding:14px 24px;border-radius:100px;font-size:.86rem;font-weight:600;z-index:999;box-shadow:0 14px 30px -10px rgba(0,0,0,.4);transition:opacity .3s;';
-      document.body.appendChild(t);
-    }
-    t.textContent = msg;
-    t.style.opacity = '1';
-    clearTimeout(window._toastTimer);
-    window._toastTimer = setTimeout(() => t.style.opacity = '0', 2200);
-  };
-
-  // --- Filtres (chips) ---
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => chip.classList.toggle('active'));
-  });
-  const rangeMin = document.getElementById('ageMin');
-  const rangeMax = document.getElementById('ageMax');
-  const rangeOut = document.getElementById('ageOut');
-  function updateRange() {
-    if (rangeMin && rangeMax && rangeOut) rangeOut.textContent = `${rangeMin.value} – ${rangeMax.value} ans`;
-  }
-  [rangeMin, rangeMax].forEach(r => r && r.addEventListener('input', updateRange));
-  updateRange();
-
-  const applyBtn = document.getElementById('applyFilters');
-  if (applyBtn) applyBtn.addEventListener('click', () => showToast('🔍 Filtres appliqués — profils mis à jour'));
-
-  // --- Messagerie ---
-  document.querySelectorAll('.conv-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.conv-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      const name = item.querySelector('strong')?.textContent || '';
-      const img = item.querySelector('img')?.src || '';
-      const chatName = document.getElementById('chatName');
-      const chatImg = document.getElementById('chatImg');
-      if (chatName) chatName.textContent = name;
-      if (chatImg) chatImg.src = img;
-      const dot = item.querySelector('.unread-dot');
-      if (dot) dot.remove();
-    });
-  });
-
-  const chatForm = document.getElementById('chatInput');
-  const chatBody = document.getElementById('chatBody');
-  if (chatForm && chatBody) {
-    chatForm.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && chatForm.value.trim()) {
-        appendBubble(chatForm.value.trim(), 'out');
-        chatForm.value = '';
-        chatBody.scrollTop = chatBody.scrollHeight;
-        setTimeout(() => {
-          appendBubble("D'accord, merci pour votre message 🙏 Je vous réponds bientôt.", 'in');
-          chatBody.scrollTop = chatBody.scrollHeight;
-        }, 900);
-      }
-    });
-    const sendBtn = document.getElementById('sendBtn');
-    if (sendBtn) sendBtn.addEventListener('click', () => {
-      if (chatForm.value.trim()) {
-        appendBubble(chatForm.value.trim(), 'out');
-        chatForm.value = '';
-        chatBody.scrollTop = chatBody.scrollHeight;
-      }
-    });
-  }
-  function appendBubble(text, dir) {
-    const div = document.createElement('div');
-    div.className = 'bubble ' + dir;
-    const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-    div.innerHTML = `${escapeHtml(text)}<span class="bubble-time">${time}</span>`;
-    chatBody.appendChild(div);
-  }
-  function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-
-  window.reportUser = () => showToast('🚩 Signalement envoyé à la modération');
-  window.blockUser = () => showToast('⛔ Utilisateur bloqué');
-
-  // --- Mon profil : switches ---
-  document.querySelectorAll('.switch').forEach(sw => {
-    sw.addEventListener('click', () => {
-      sw.classList.toggle('on');
-      showToast(sw.classList.contains('on') ? '✅ Option activée' : '⏸️ Option désactivée');
-    });
-  });
-
-  // --- Inscription : stepper ---
-  const stepPanels = document.querySelectorAll('.step-panel');
-  const spDots = document.querySelectorAll('.sp-dot');
-  let currentStep = 0;
-  function goStep(n) {
-    if (n < 0 || n >= stepPanels.length) return;
-    stepPanels[currentStep]?.classList.remove('show');
-    currentStep = n;
-    stepPanels[currentStep]?.classList.add('show');
-    spDots.forEach((d, i) => {
-      d.classList.toggle('active', i === currentStep);
-      d.classList.toggle('done', i < currentStep);
-    });
-    window.scrollTo({ top: document.querySelector('.form-shell')?.offsetTop - 100, behavior: 'smooth' });
-  }
-  document.querySelectorAll('.next-step').forEach(btn => btn.addEventListener('click', () => goStep(currentStep + 1)));
-  document.querySelectorAll('.prev-step').forEach(btn => btn.addEventListener('click', () => goStep(currentStep - 1)));
-  const submitBtn = document.getElementById('submitInscription');
-  if (submitBtn) submitBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const consent = document.getElementById('consentCheck');
-    if (consent && !consent.checked) { showToast('⚠️ Veuillez accepter les conditions d\'utilisation'); return; }
-    document.getElementById('inscriptionForm').style.display = 'none';
-    document.getElementById('successPanel').style.display = 'block';
-  });
-
-  // --- Upload zone preview text ---
-  document.querySelectorAll('.upload-zone input[type=file]').forEach(inp => {
-    inp.addEventListener('change', () => {
-      const zone = inp.closest('.upload-zone');
-      const p = zone.querySelector('p');
-      if (inp.files.length && p) p.textContent = `${inp.files.length} photo(s) sélectionnée(s) ✓`;
-    });
-  });
-
-  // --- Admin: tabs ---
-  document.querySelectorAll('.admin-tabs').forEach(tabGroup => {
-    const buttons = tabGroup.querySelectorAll('button');
-    buttons.forEach(b => b.addEventListener('click', () => {
-      buttons.forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      const target = b.dataset.target;
-      tabGroup.parentElement.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
-      const el = document.getElementById(target);
-      if (el) el.style.display = 'block';
-    }));
-  });
-
-  // --- Admin: row actions demo ---
-  document.querySelectorAll('.row-actions button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const row = btn.closest('tr');
-      if (btn.classList.contains('approve')) {
-        const pill = row.querySelector('.status-pill');
-        if (pill) { pill.className = 'status-pill ok'; pill.textContent = 'Vérifié'; }
-        showToast('✅ Profil vérifié avec succès');
-      } else if (btn.classList.contains('reject')) {
-        const pill = row.querySelector('.status-pill');
-        if (pill) { pill.className = 'status-pill blocked'; pill.textContent = 'Rejeté'; }
-        showToast('❌ Profil rejeté');
-      } else if (btn.classList.contains('suspend')) {
-        row.style.opacity = '.4';
-        showToast('⏸️ Compte suspendu');
-      } else if (btn.classList.contains('view')) {
-        showToast('👁️ Ouverture du profil…');
-      }
-    });
-  });
-
-  // --- Pricing toggle (mensuel/annuel) ---
-  const billToggle = document.getElementById('billToggle');
-  if (billToggle) {
-    billToggle.addEventListener('click', () => {
-      billToggle.classList.toggle('on');
-      document.querySelectorAll('.price-amount').forEach(el => {
-        const monthly = el.dataset.monthly, yearly = el.dataset.yearly;
-        el.textContent = billToggle.classList.contains('on') ? yearly : monthly;
-      });
-      document.querySelectorAll('.price-period').forEach(el => {
-        el.textContent = billToggle.classList.contains('on') ? '/ an' : '/ mois';
-      });
-    });
-  }
-
-  // --- Reveal on scroll ---
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('reveal'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.step-card, .pcard, .testi-card, .price-card').forEach(el => io.observe(el));
-
-});
-
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const el = document.getElementById('footer-placeholder');
-  if (!el) return;
-  el.innerHTML = `
+  
   <footer>
     <div class="container">
       <div class="foot-grid">
