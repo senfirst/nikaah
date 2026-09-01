@@ -471,5 +471,966 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   
+<!-- =====================================================
+     SUPABASE
+     ===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://yoixssfjtxrfcqrutcgv.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_mp--qt2kywTEhaBYjN3Afw_6-J6X_Bc";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+
+let currentUser = null;
+let currentProfile = null;
+
+
+/* =====================================================
+   CALCUL DE L'ÂGE
+   ===================================================== */
+
+function calculateAge(dateNaissance) {
+
+    if (!dateNaissance) return null;
+
+    const birth = new Date(dateNaissance);
+    const today = new Date();
+
+    let age =
+        today.getFullYear() -
+        birth.getFullYear();
+
+    const month =
+        today.getMonth() -
+        birth.getMonth();
+
+    if (
+        month < 0 ||
+        (
+            month === 0 &&
+            today.getDate() < birth.getDate()
+        )
+    ) {
+        age--;
+    }
+
+    return age;
+}
+
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+
+function showToast(message) {
+
+    let toast =
+        document.querySelector(".toast");
+
+    if (!toast) {
+
+        toast =
+            document.createElement("div");
+
+        toast.className = "toast";
+
+        toast.style.cssText = `
+            position:fixed;
+            bottom:25px;
+            left:50%;
+            transform:translateX(-50%);
+            background:#0B1F3A;
+            color:#F3E6C6;
+            padding:14px 24px;
+            border-radius:100px;
+            font-size:.86rem;
+            font-weight:600;
+            z-index:9999;
+            box-shadow:0 14px 30px -10px rgba(0,0,0,.4);
+        `;
+
+        document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+
+    toast.style.opacity = "1";
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer =
+        setTimeout(() => {
+
+            toast.style.opacity = "0";
+
+        }, 2500);
+}
+
+
+/* =====================================================
+   CHARGER LE PROFIL
+   ===================================================== */
+
+async function loadProfile() {
+
+    console.log("🔄 Chargement du profil...");
+
+
+    /* -----------------------------------------------
+       Récupérer l'utilisateur connecté
+       ----------------------------------------------- */
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (userError) {
+
+        console.error(
+            "Erreur utilisateur :",
+            userError
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------------
+       Aucun utilisateur connecté
+       ----------------------------------------------- */
+
+    if (!user) {
+
+        console.log(
+            "❌ Aucun utilisateur connecté"
+        );
+
+        showToast(
+            "⚠️ Vous devez être connecté."
+        );
+
+        setTimeout(() => {
+
+            window.location.href =
+                "connexion.html";
+
+        }, 1500);
+
+        return;
+    }
+
+
+    currentUser = user;
+
+    console.log(
+        "✅ Utilisateur connecté :",
+        user.id
+    );
+
+
+    /* -----------------------------------------------
+       Récupérer SON profil
+       ----------------------------------------------- */
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .maybeSingle();
+
+
+    if (profileError) {
+
+        console.error(
+            "❌ Erreur récupération profil :",
+            profileError
+        );
+
+        showToast(
+            "❌ Impossible de charger votre profil."
+        );
+
+        return;
+    }
+
+
+    if (!profile) {
+
+        console.log(
+            "⚠️ Aucun profil trouvé."
+        );
+
+        showToast(
+            "⚠️ Votre profil n'existe pas encore."
+        );
+
+        return;
+    }
+
+
+    currentProfile = profile;
+
+    console.log(
+        "✅ Profil récupéré :",
+        profile
+    );
+
+
+    displayProfile(profile);
+
+}
+
+
+/* =====================================================
+   AFFICHER LE PROFIL
+   ===================================================== */
+
+function displayProfile(profile) {
+
+    const prenom =
+        profile.prenom || "";
+
+    const nom =
+        profile.nom || "";
+
+    const fullName =
+        `${prenom} ${nom}`.trim();
+
+
+    /* -----------------------------------------------
+       Nom dans l'en-tête
+       ----------------------------------------------- */
+
+    const welcomeName =
+        document.getElementById(
+            "welcomeName"
+        );
+
+    if (welcomeName) {
+
+        welcomeName.textContent =
+            prenom
+                ? `Bienvenue, ${prenom} 👋`
+                : "Bienvenue 👋";
+    }
+
+
+    /* -----------------------------------------------
+       Nom dans la carte
+       ----------------------------------------------- */
+
+    const profileName =
+        document.getElementById(
+            "profileName"
+        );
+
+    if (profileName) {
+
+        profileName.textContent =
+            fullName || "Mon profil";
+    }
+
+
+    /* -----------------------------------------------
+       Âge + ville
+       ----------------------------------------------- */
+
+    const age =
+        calculateAge(
+            profile.date_naissance
+        );
+
+    const ville =
+        profile.ville || "";
+
+
+    const details = [];
+
+    if (age !== null) {
+
+        details.push(
+            `${age} ans`
+        );
+
+    }
+
+    if (ville) {
+
+        details.push(
+            ville
+        );
+
+    }
+
+
+    const profileDetails =
+        document.getElementById(
+            "profileDetails"
+        );
+
+    if (profileDetails) {
+
+        profileDetails.textContent =
+            details.length
+                ? details.join(" — ")
+                : "Profil Nikaakh";
+    }
+
+
+    /* -----------------------------------------------
+       Champs du formulaire
+       ----------------------------------------------- */
+
+    setValue(
+        "prenom",
+        profile.prenom
+    );
+
+    setValue(
+        "nom",
+        profile.nom
+    );
+
+    setValue(
+        "date_naissance",
+        profile.date_naissance
+    );
+
+    setValue(
+        "ville",
+        profile.ville
+    );
+
+    setValue(
+        "region",
+        profile.region
+    );
+
+    setValue(
+        "profession",
+        profile.profession
+    );
+
+    setValue(
+        "situation_matrimoniale",
+        profile.situation_matrimoniale
+    );
+
+    setValue(
+        "description",
+        profile.description
+    );
+
+    setValue(
+        "age_recherche",
+        profile.age_recherche
+    );
+
+    setValue(
+        "region_recherchee",
+        profile.region_recherchee
+    );
+
+
+    /* -----------------------------------------------
+       Centres d'intérêt
+       ----------------------------------------------- */
+
+    const interests =
+        Array.isArray(
+            profile.centres_interet
+        )
+            ? profile.centres_interet
+            : [];
+
+
+    document
+        .querySelectorAll(".interest")
+        .forEach(button => {
+
+            const value =
+                button.dataset.value;
+
+            button.classList.toggle(
+                "active",
+                interests.includes(value)
+            );
+
+        });
+
+
+    /* -----------------------------------------------
+       Photo
+       ----------------------------------------------- */
+
+    if (profile.photo_url) {
+
+        const photo =
+            document.getElementById(
+                "profilePhoto"
+            );
+
+        if (photo) {
+
+            photo.src =
+                profile.photo_url;
+        }
+    }
+
+}
+
+
+/* =====================================================
+   HELPER INPUT
+   ===================================================== */
+
+function setValue(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) return;
+
+    element.value =
+        value ?? "";
+
+}
+
+
+/* =====================================================
+   ENREGISTRER LE PROFIL
+   ===================================================== */
+
+async function saveProfile() {
+
+    if (!currentUser) {
+
+        showToast(
+            "❌ Utilisateur non connecté."
+        );
+
+        return;
+    }
+
+
+    const prenom =
+        document
+            .getElementById("prenom")
+            ?.value.trim();
+
+
+    const nom =
+        document
+            .getElementById("nom")
+            ?.value.trim();
+
+
+    const date_naissance =
+        document
+            .getElementById("date_naissance")
+            ?.value;
+
+
+    const ville =
+        document
+            .getElementById("ville")
+            ?.value.trim();
+
+
+    const region =
+        document
+            .getElementById("region")
+            ?.value;
+
+
+    const profession =
+        document
+            .getElementById("profession")
+            ?.value.trim();
+
+
+    const situation_matrimoniale =
+        document
+            .getElementById(
+                "situation_matrimoniale"
+            )
+            ?.value;
+
+
+    const description =
+        document
+            .getElementById("description")
+            ?.value.trim();
+
+
+    const centres_interet =
+        Array.from(
+            document.querySelectorAll(
+                ".interest.active"
+            )
+        ).map(
+            button =>
+                button.dataset.value
+        );
+
+
+    const saveButton =
+        document.getElementById(
+            "saveProfile"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.disabled = true;
+
+        saveButton.textContent =
+            "Enregistrement...";
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("profiles")
+                .update({
+
+                    prenom,
+
+                    nom,
+
+                    date_naissance,
+
+                    ville,
+
+                    region,
+
+                    profession,
+
+                    situation_matrimoniale,
+
+                    description,
+
+                    centres_interet
+
+                })
+                .eq(
+                    "id",
+                    currentUser.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur update :",
+                error
+            );
+
+            throw error;
+        }
+
+
+        showToast(
+            "✅ Profil mis à jour !"
+        );
+
+
+        await loadProfile();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "❌ " + error.message
+        );
+
+    } finally {
+
+        if (saveButton) {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Enregistrer les modifications";
+        }
+    }
+
+}
+
+
+/* =====================================================
+   ENREGISTRER LES PRÉFÉRENCES
+   ===================================================== */
+
+async function savePreferences() {
+
+    if (!currentUser) return;
+
+
+    const age_recherche =
+        document
+            .getElementById(
+                "age_recherche"
+            )
+            ?.value.trim();
+
+
+    const region_recherchee =
+        document
+            .getElementById(
+                "region_recherchee"
+            )
+            ?.value;
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+
+                age_recherche,
+
+                region_recherchee
+
+            })
+            .eq(
+                "id",
+                currentUser.id
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "❌ Impossible d'enregistrer."
+        );
+
+        return;
+    }
+
+
+    showToast(
+        "✅ Préférences enregistrées."
+    );
+
+}
+
+
+/* =====================================================
+   MOT DE PASSE
+   ===================================================== */
+
+async function updatePassword() {
+
+    const password =
+        document
+            .getElementById(
+                "newPassword"
+            )
+            ?.value;
+
+
+    if (!password || password.length < 8) {
+
+        showToast(
+            "⚠️ Le mot de passe doit contenir au moins 8 caractères."
+        );
+
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient.auth.updateUser({
+
+            password
+
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "❌ " + error.message
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "newPassword"
+    ).value = "";
+
+
+    showToast(
+        "✅ Mot de passe mis à jour."
+    );
+
+}
+
+
+/* =====================================================
+   MENU PROFIL
+   ===================================================== */
+
+function setupProfileNavigation() {
+
+    document
+        .querySelectorAll(
+            ".acc-nav .nav-item"
+        )
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    document
+                        .querySelectorAll(
+                            ".acc-nav .nav-item"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList
+                                    .remove("active")
+                        );
+
+
+                    link.classList.add(
+                        "active"
+                    );
+
+
+                    document
+                        .querySelectorAll(
+                            ".acc-panel"
+                        )
+                        .forEach(
+                            panel =>
+                                panel.classList
+                                    .remove("show")
+                        );
+
+
+                    const target =
+                        document.getElementById(
+                            link.dataset.target
+                        );
+
+
+                    if (target) {
+
+                        target.classList.add(
+                            "show"
+                        );
+
+                    }
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   CENTRES D'INTÉRÊT
+   ===================================================== */
+
+function setupInterests() {
+
+    document
+        .querySelectorAll(
+            ".interest"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    button.classList.toggle(
+                        "active"
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   DÉCONNEXION
+   ===================================================== */
+
+async function logout() {
+
+    const {
+        error
+    } =
+        await supabaseClient.auth.signOut();
+
+
+    if (error) {
+
+        showToast(
+            "❌ Impossible de se déconnecter."
+        );
+
+        return;
+    }
+
+
+    window.location.href =
+        "connexion.html";
+
+}
+
+
+/* =====================================================
+   INITIALISATION
+   ===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        setupProfileNavigation();
+
+        setupInterests();
+
+        const saveButton =
+            document.getElementById(
+                "saveProfile"
+            );
+
+        if (saveButton) {
+
+            saveButton.addEventListener(
+                "click",
+                saveProfile
+            );
+
+        }
+
+
+        const preferenceButton =
+            document.getElementById(
+                "savePreferences"
+            );
+
+        if (preferenceButton) {
+
+            preferenceButton.addEventListener(
+                "click",
+                savePreferences
+            );
+
+        }
+
+
+        const passwordButton =
+            document.getElementById(
+                "updatePassword"
+            );
+
+        if (passwordButton) {
+
+            passwordButton.addEventListener(
+                "click",
+                updatePassword
+            );
+
+        }
+
+
+        /* -------------------------------------------
+           Upload photo
+           ------------------------------------------- */
+
+        const photoInput =
+            document.getElementById(
+                "photoInput"
+            );
+
+        if (photoInput) {
+
+            photoInput.addEventListener(
+                "change",
+                () => {
+
+                    if (
+                        photoInput.files &&
+                        photoInput.files.length
+                    ) {
+
+                        showToast(
+                            "📷 Photo sélectionnée. Supabase Storage sera utilisé pour l'enregistrer."
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        await loadProfile();
+
+    }
+);
+
+</script>
+```
+
+
+
+  
 </body>
 </html>
